@@ -19,7 +19,7 @@ As uses vite, also added the vite plugin to help regenerating the routes every t
 npm i -D @tanstack/router-plugin
 ```
 
-The vite plugin automatically bootstrap the routes when component is created under (`src/routes`) to something like this:
+The plugin automatically bootstrap the routes when component is created under (`src/routes`) to something like this:
 ```js
 import { createFileRoute } from '@tanstack/react-router'
 
@@ -31,4 +31,22 @@ function RouteComponent() {
   return <div>Hello "/profile"!</div>
 }
 ```
+---
+
+### Link component
+The Link component as other libraries do is to handle navigation instead of using `<a>` tags.
+
+- The `Link` component has cool props like for example the `activeProps` that are style props shown when that route is active.
+- Or even more interesting `Link` components can receive a function that have a parameter `isActive` and you can do whatever you want
+
+```tsx
+<>
+  <Link to="/profile" activeProps={activeProps}>
+    {
+      ({ isActive }) => <>Profile {isActive && ' (Active)'}</>
+    }
+  </Link>
+ <>
+```
+
 
