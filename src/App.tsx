@@ -9,7 +9,8 @@ const router = createRouter({ routeTree })
 
 // expand the interface to make autocomplete work with the router
 declare module '@tanstack/react-router' {
-  export interface RegisterRouter {
+  // This infers the type of our router and registers it across your entire project
+  export interface Register {
     router: typeof router
   }
 }
