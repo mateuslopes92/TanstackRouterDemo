@@ -31,6 +31,12 @@ function RouteComponent() {
   return <div>Hello "/profile"!</div>
 }
 ```
+
+### Entry point (App.tsx)
+- Router creation
+- routeTree auto generated
+- Inference of route types
+
 ---
 
 ### Link component
