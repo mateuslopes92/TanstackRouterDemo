@@ -8,7 +8,7 @@ export const Route = createRootRoute({
   component: () => (
     <>
       <header className="header">
-        <h1 className="header__title">My Tanstack App</h1>
+        <h1 className="header__title">Pokemon Tanstack Router App</h1>
         <nav>
           <ul className="header__nav">
             <li>
@@ -18,13 +18,13 @@ export const Route = createRootRoute({
             </li>
             <li>
               <Link
-                to="/profile"
+                to="/pokemon"
                 className="header__link"
                 activeProps={activeProps}
               >
                 {({ isActive }) => (
                   <span className={isActive ? "header__link--active" : ""}>
-                    Profile {isActive && "(You are here)"}
+                    Pokemons {isActive && "(You are here)"}
                   </span>
                 )}
               </Link>
