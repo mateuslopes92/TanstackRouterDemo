@@ -29,6 +29,15 @@ export const Route = createRootRoute({
                 )}
               </Link>
             </li>
+            <li>
+              <Link
+                to="/search"
+                className="header__link"
+                activeProps={activeProps}
+              >
+                Search
+              </Link>
+            </li>
           </ul>
         </nav>
       </header>
