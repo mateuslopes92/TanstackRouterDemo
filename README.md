@@ -1,7 +1,9 @@
 # Tanstack Router Demo
 
 ## Tanstack Router Features
-- 100% inferred TypeScript support
+- **Typesafe & powerful** — 100% typesafe routing without compromising DX
+- **Built-in Data Fetching with Caching** — loader API avoids waterfalls, built-in caching and preloading
+- **Search Param APIs** — state-manager-grade search params with schemas, validation, and full type-safety
 
 ## Project
 This project was created using vite and typescript template with the command:
@@ -107,3 +109,72 @@ function PokemonList() {
   const pokemons = Route.useLoaderData(); // get response
   ...
 ```
+
+</br>
+
+## Query Parameters & Validation (search.tsx)
+
+Query parameters can **replace React `useState`** for filter/search state — the URL becomes the single source of truth. This makes state shareable, bookmarkable, and persistable across refreshes.
+
+### Defining & validating with Zod (or Valibot)
+
+Use `z.object` to define the shape and types of your query params, then wire it to the route with `validateSearch`:
+
+```tsx
+const SearchFiltersSchema = z.object({
+  query: z.string().default(''),
+  types: z.preprocess(
+    (val) => {
+      if (Array.isArray(val)) return val
+      if (typeof val === 'string') return val.split(',').filter(Boolean)
+      return []
+    },
+    z.array(PokemonTypeSchema)
+  ).catch([]),
+})
+
+export const Route = createFileRoute('/search')({
+  validateSearch: (search) => SearchFiltersSchema.parse(search ?? {}),
+  // ...
+})
+```
+
+### `loaderDeps` — react to query changes
+
+`loaderDeps` tells the loader to re-run when query params change. The deps are available inside the loader via `deps`:
+
+```tsx
+export const Route = createFileRoute('/search')({
+  validateSearch: (search) => SearchFiltersSchema.parse(search ?? {}),
+  loaderDeps: ({ search }) => ({ search }),
+  loader: async ({ deps }) => {
+    const { query, types } = SearchFiltersSchema.parse(deps.search ?? {})
+    if (!query) return []
+    return searchPokemon(query, types)
+  },
+})
+```
+
+### Reading search & navigating
+
+`Route.useSearch()` reads the validated query params. `Route.useNavigate()` can update them — which **changes the URL**, so the state survives a refresh:
+
+```tsx
+function Search() {
+  const { query, types: selectedTypes } = Route.useSearch()
+  const navigate = Route.useNavigate({ from: Route.fullPath })
+
+  const updateFilters = (name: string, value: string | string[]) => {
+    navigate({ search: (prev) => ({ ...prev, [name]: value }) })
+  }
+
+  return (
+    <input
+      value={query}
+      onChange={(e) => updateFilters('query', e.target.value)}
+    />
+  )
+}
+```
+
+No `useState`, no `useEffect` to sync — the URL is the state. On refresh the filters persist because they live in the URL.
