@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { z } from 'zod'
-import { searchPokemon, type SearchResult } from '../api/pokemon'
+import { searchPokemon, type SearchResult } from '../../api/pokemon'
 // import React from 'react';
 
 const PokemonTypeSchema = z.enum([
@@ -43,7 +43,7 @@ const types: { value: PokemonType; label: string }[] = [
   { value: 'fairy', label: 'Fairy' },
 ];
 
-export const Route = createFileRoute('/search')({
+export const Route = createFileRoute('/_authenticated/search')({
   component: Search,
   validateSearch: (search) => SearchFiltersSchema.parse(search ?? {}),
   loaderDeps: ({ search }) => ({ search }),

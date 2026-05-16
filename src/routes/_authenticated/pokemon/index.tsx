@@ -1,8 +1,8 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
 
-import { pokemonList } from '../../api/pokemon'
+import { pokemonList } from '../../../api/pokemon'
 
-export const Route = createFileRoute('/pokemon/')({
+export const Route = createFileRoute('/_authenticated/pokemon/')({
   component: PokemonList,
   loader: async () => pokemonList(),
 })
@@ -17,14 +17,14 @@ function PokemonList() {
       </h1>
       <div className="pokemon-list">
         {pokemons.results.map((p) => (
-          <Link 
-            key={p.id} 
-            to={`/pokemon/$id`} 
+          <Link
+            key={p.id}
+            to={`/pokemon/$id`}
             params={{ id: String(p.id) }}
             className="pokemon-item"
           >
             <span className="pokemon-item__number">#{String(p.id).padStart(3, '0')}</span>
-            <img 
+            <img
               className="pokemon-item__image"
               src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${p.id}.png`}
               alt={p.name}
