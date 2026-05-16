@@ -178,3 +178,74 @@ function Search() {
 ```
 
 No `useState`, no `useEffect` to sync — the URL is the state. On refresh the filters persist because they live in the URL.
+
+</br>
+
+## Authenticated Routes (_authenticated.tsx, auth.tsx, hooks/useAuth.ts)
+
+Protect certain pages behind an authentication check. Uses a simple localStorage flag to track auth state and `router.invalidate()` to re-trigger route guards after sign in/out.
+
+### The `useAuth` hook (`hooks/useAuth.ts`)
+
+Returns `{ signIn, signOut, isLogged }`. `isLogged` is a **function** (reads localStorage on every call) — this avoids stale-state issues because route guards (`beforeLoad`) run outside React's render cycle:
+
+```tsx
+const isLogged = () => localStorage.getItem("isAuthenticated") === "true";
+```
+
+### Typing the context (`__root.tsx`)
+
+Use `createRootRouteWithContext` to type the context that flows through your router:
+
+```tsx
+type RouterContext = { authentication: AuthContext };
+export const Route = createRootRouteWithContext<RouterContext>()({...})
+```
+
+### The `beforeLoad` guard (`_authenticated.tsx`)
+
+The underscore prefix creates a **pathless layout route** — it wraps children without adding a URL segment. `beforeLoad` runs before the component renders, making it the right place to check auth:
+
+```tsx
+beforeLoad: async ({ context }) => {
+  const { isLogged } = context.authentication;
+  if (!isLogged()) throw redirect({ to: "/auth" });
+}
+```
+
+Protected routes go inside `_authenticated/`:
+- `_authenticated/profile.tsx` → URL: `/profile`
+- `_authenticated/settings.tsx` → URL: `/settings`
+
+### Passing context (`App.tsx`)
+
+Wire the hook into the router at runtime via `RouterProvider`'s `context` prop:
+
+```tsx
+const router = createRouter({
+  routeTree,
+  context: { authentication: undefined! }, // placeholder
+});
+
+function App() {
+  const authentication = useAuth();
+  return <RouterProvider router={router} context={{ authentication }} />;
+}
+```
+
+### `router.invalidate()` after auth change (`auth.tsx`)
+
+After `signIn()` / `signOut()`, call `router.invalidate()` to re-run load functions (including `beforeLoad`) so protected routes re-evaluate access:
+
+```tsx
+signIn();
+router.invalidate(); // re-runs beforeLoad on all active matches
+refresh((n) => n + 1); // forces UI re-render on this page
+```
+
+</br>
+
+### Flow summary
+1. **Sign in** → localStorage set → `router.invalidate()` → `beforeLoad` re-runs → `isLogged()` reads localStorage → access granted on protected routes
+2. **Unauthenticated visit** to `/profile` → `beforeLoad` → `isLogged()` returns `false` → `redirect("/auth")`
+3. **Sign out** → localStorage removed → `router.invalidate()` → `refresh()` updates UI
