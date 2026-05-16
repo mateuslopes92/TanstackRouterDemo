@@ -1,10 +1,16 @@
 import "../App.css";
 
-import { Link, Outlet, createRootRoute } from "@tanstack/react-router";
+import { Link, Outlet, createRootRouteWithContext } from "@tanstack/react-router";
+
+import type { AuthContext } from "../hooks/useAuth";
 
 const activeProps = { className: "header__link header__link--active" };
 
-export const Route = createRootRoute({
+type RouterContext = {
+  authentication: AuthContext;
+}
+
+export const Route = createRootRouteWithContext<RouterContext>()({
   component: () => (
     <>
       <header className="header">
@@ -36,6 +42,35 @@ export const Route = createRootRoute({
                 activeProps={activeProps}
               >
                 Search
+              </Link>
+            </li>
+
+            <li className="header__nav--spacer" />
+            <li>
+              <Link
+                to="/auth"
+                className="header__link"
+                activeProps={activeProps}
+              >
+                Auth
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/profile"
+                className="header__link"
+                activeProps={activeProps}
+              >
+                Profile
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/settings"
+                className="header__link"
+                activeProps={activeProps}
+              >
+                Settings
               </Link>
             </li>
           </ul>
