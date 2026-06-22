@@ -249,3 +249,21 @@ refresh((n) => n + 1); // forces UI re-render on this page
 1. **Sign in** → localStorage set → `router.invalidate()` → `beforeLoad` re-runs → `isLogged()` reads localStorage → access granted on protected routes
 2. **Unauthenticated visit** to `/profile` → `beforeLoad` → `isLogged()` returns `false` → `redirect("/auth")`
 3. **Sign out** → localStorage removed → `router.invalidate()` → `refresh()` updates UI
+
+## Non-route folders (the `-` prefix trick)
+
+Folders starting with a hyphen inside `src/routes` are **ignored by the router** — they won't become URL segments. This lets you colocate components, hooks, or utils close to your routes without polluting the URL:
+
+```
+src/routes/_authenticated/pokemon/
+  -components/
+    PokemonCardStats.tsx   ← not a route
+  $id.tsx                  ← /pokemon/$id
+  index.tsx                ← /pokemon
+```
+
+Import like any relative module:
+
+```tsx
+import { PokemonCardStats } from './-components/PokemonCardStats'
+```
