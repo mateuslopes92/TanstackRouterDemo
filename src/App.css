@@ -671,3 +671,130 @@ ul {
 .page__button--danger:hover {
   background: #c82333;
 }
+
+/* 404 Page Styles */
+.not-found {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  text-align: center;
+  padding: 2rem;
+}
+
+.not-found__pokeball {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  margin-bottom: 2rem;
+  animation: notFoundShake 1.5s ease-in-out infinite;
+}
+
+.not-found__pokeball-top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 58px;
+  background: linear-gradient(135deg, #EE1515 0%, #CC0000 100%);
+  border-radius: 60px 60px 0 0;
+  border: 4px solid #333;
+  border-bottom: none;
+}
+
+.not-found__pokeball-bottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 58px;
+  background: #fff;
+  border-radius: 0 0 60px 60px;
+  border: 4px solid #333;
+  border-top: none;
+}
+
+.not-found__pokeball::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: #333;
+  transform: translateY(-50%);
+  z-index: 1;
+}
+
+.not-found__pokeball-button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 28px;
+  height: 28px;
+  background: #fff;
+  border: 4px solid #333;
+  border-radius: 50%;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.not-found__pokeball-button::before {
+  content: '';
+  width: 10px;
+  height: 10px;
+  background: #fff;
+  border: 2px solid #666;
+  border-radius: 50%;
+}
+
+@keyframes notFoundShake {
+  0%, 100% { transform: rotate(0deg); }
+  20% { transform: rotate(-15deg); }
+  40% { transform: rotate(15deg); }
+  60% { transform: rotate(-10deg); }
+  80% { transform: rotate(10deg); }
+}
+
+.not-found__code {
+  font-size: 5rem;
+  font-weight: 800;
+  color: #EE1515;
+  text-shadow: 0 4px 12px rgba(238, 21, 21, 0.3);
+  margin-bottom: 0.5rem;
+  line-height: 1;
+}
+
+.not-found__text {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.not-found__hint {
+  font-size: 1rem;
+  color: #6c757d;
+  margin-bottom: 2rem;
+}
+
+.not-found__link {
+  display: inline-block;
+  background: linear-gradient(135deg, #EE1515 0%, #CC0000 100%);
+  color: #fff;
+  padding: 0.85rem 2rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  text-decoration: none;
+}
+
+.not-found__link:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+}
