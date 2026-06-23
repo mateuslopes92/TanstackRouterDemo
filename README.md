@@ -1,9 +1,18 @@
 # Tanstack Router Demo
 
+## Tanstack
+Is a suite of tools built from Tanner Linsley in 2025. Some of those tools:
+- Tanstack Router
+- Tanstack Query(React Query)
+- Tanstack Table
+- much more...
+
+
 ## Tanstack Router Features
-- **Typesafe & powerful** — 100% typesafe routing without compromising DX
+- **Typesafe & powerful** — 100% typesafe routing
 - **Built-in Data Fetching with Caching** — loader API avoids waterfalls, built-in caching and preloading
 - **Search Param APIs** — state-manager-grade search params with schemas, validation, and full type-safety
+- **File system based routes** - Is just create a folder/file inside routes folder.
 
 ## Project
 This project was created using vite and typescript template with the command:
