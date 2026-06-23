@@ -276,3 +276,43 @@ Import like any relative module:
 ```tsx
 import { PokemonCardStats } from './-components/PokemonCardStats'
 ```
+
+</br>
+
+## Not Found Handling (`defaultNotFoundComponent` & `notFoundComponent`)
+
+TanStack Router has two levels for handling 404s:
+
+### Router-level: `defaultNotFoundComponent`
+
+Set on `createRouter()` in `App.tsx`. Catches **every URL that doesn't match any route**:
+
+```tsx
+const router = createRouter({
+  routeTree,
+  context: { authentication: undefined! },
+  defaultNotFoundComponent: () => <div>Default 404</div>,
+})
+```
+
+### Route-level: `notFoundComponent`
+
+Set on a specific route. Two ways it triggers:
+
+**1. Explicit `notFound()` call** — throw `notFound()` in `beforeLoad` or `loader` when a resource doesn't exist. The route's own `notFoundComponent` renders instead of the regular component:
+
+```tsx
+export const Route = createFileRoute("/_authenticated/profile")({
+  beforeLoad: async ({ notFound }) => {
+    const data = await fetchData()
+    if (!data) throw notFound()
+  },
+  component: Profile,
+  notFoundComponent: () => <div>Page not found inside /profile</div>,
+})
+```
+
+**2. Unmatched child paths** — if the route has children (`<Outlet>`) and no child route matches the URL, the route's `notFoundComponent` renders. Leaf routes (no children) **cannot** catch unmatched sub-paths — they bubble up to the nearest parent with children or to `defaultNotFoundComponent`.
+
+> 💡 `defaultNotFoundComponent` = no route matched at all
+> 💡 `notFoundComponent` = route matched but content wasn't found
