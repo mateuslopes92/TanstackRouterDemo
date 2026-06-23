@@ -16,6 +16,7 @@ export const Route = createFileRoute("/_authenticated/profile")({
     }
   },
   component: Profile,
+  //notFoundComponent: () => <div>Page not found inside /profile</div>,
 });
 
 const user = {
