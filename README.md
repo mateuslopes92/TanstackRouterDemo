@@ -316,3 +316,41 @@ export const Route = createFileRoute("/_authenticated/profile")({
 
 > 💡 `defaultNotFoundComponent` = no route matched at all
 > 💡 `notFoundComponent` = route matched but content wasn't found
+
+</br>
+
+## Nested Routes & Layouts (`nested/`)
+
+`nested/route.tsx` defines a layout route at `/nested` with a sidebar and `<Outlet />`. Child routes render inside the outlet — the layout persists as you navigate between them:
+
+```
+src/routes/nested/
+  route.tsx        ← layout at /nested (sidebar + <Outlet />)
+  pikachu.tsx      ← /nested/pikachu
+  charmander.tsx   ← /nested/charmander
+```
+
+```tsx
+// nested/route.tsx
+function RouteComponent() {
+  return (
+    <div className="sidesheet-layout">
+      <aside className="sidesheet">
+        <nav>
+          <Link to="/nested/pikachu">Pikachu</Link>
+          <Link to="/nested/charmander">Charmander</Link>
+        </nav>
+      </aside>
+      <main>
+        <Outlet /> {/* child route renders here */}
+      </main>
+    </div>
+  )
+}
+```
+
+The sidebar stays mounted — only the outlet content swaps. This is how you build persistent UIs like dashboards, settings panels, or multi-step flows without re-rendering shared chrome.
+
+> 💡 `nested/route.tsx` = layout at `/nested`
+> 💡 `nested/pikachu.tsx` = content renders inside the layout
+> 💡 `<Outlet />` = where the matched child renders
