@@ -672,6 +672,74 @@ ul {
   background: #c82333;
 }
 
+/* Sidesheet Layout */
+.sidesheet-layout {
+  display: flex;
+  align-items: flex-start;
+}
+
+.sidesheet {
+  position: fixed;
+  top: 104px;
+  left: 0;
+  bottom: 0;
+  width: 220px;
+  background: #fff;
+  border-right: 1px solid #e9ecef;
+  display: flex;
+  flex-direction: column;
+
+}
+
+.sidesheet__header {
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.sidesheet__title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #6c757d;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.sidesheet__nav {
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem 0;
+}
+
+.sidesheet__link {
+  display: block;
+  padding: 0.75rem 1.5rem;
+  color: #495057;
+  font-weight: 500;
+  font-size: 0.95rem;
+  text-decoration: none;
+  transition: background 0.2s ease, color 0.2s ease;
+  border-left: 3px solid transparent;
+}
+
+.sidesheet__link:hover {
+  background: #f8f9fa;
+  color: #EE1515;
+}
+
+.sidesheet__link--active {
+  background: #fff0f0;
+  color: #EE1515;
+  border-left-color: #EE1515;
+  font-weight: 600;
+}
+
+.sidesheet-content {
+  margin-left: 220px;
+  flex: 1;
+  min-width: 0;
+}
+
 /* 404 Page Styles */
 .not-found {
   display: flex;
