@@ -11,7 +11,10 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
+import { Route as NestedRouteRouteImport } from './routes/nested/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as NestedPikachuRouteImport } from './routes/nested/pikachu'
+import { Route as NestedCharmanderRouteImport } from './routes/nested/charmander'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as AuthenticatedSearchRouteImport } from './routes/_authenticated/search'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
@@ -27,10 +30,25 @@ const AuthenticatedRoute = AuthenticatedRouteImport.update({
   id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
+const NestedRouteRoute = NestedRouteRouteImport.update({
+  id: '/nested',
+  path: '/nested',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const NestedPikachuRoute = NestedPikachuRouteImport.update({
+  id: '/pikachu',
+  path: '/pikachu',
+  getParentRoute: () => NestedRouteRoute,
+} as any)
+const NestedCharmanderRoute = NestedCharmanderRouteImport.update({
+  id: '/charmander',
+  path: '/charmander',
+  getParentRoute: () => NestedRouteRoute,
 } as any)
 const AuthenticatedSettingsRoute = AuthenticatedSettingsRouteImport.update({
   id: '/settings',
@@ -61,30 +79,39 @@ const AuthenticatedPokemonIdRoute = AuthenticatedPokemonIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/nested': typeof NestedRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/search': typeof AuthenticatedSearchRoute
   '/settings': typeof AuthenticatedSettingsRoute
+  '/nested/charmander': typeof NestedCharmanderRoute
+  '/nested/pikachu': typeof NestedPikachuRoute
   '/pokemon/$id': typeof AuthenticatedPokemonIdRoute
   '/pokemon/': typeof AuthenticatedPokemonIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/nested': typeof NestedRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/search': typeof AuthenticatedSearchRoute
   '/settings': typeof AuthenticatedSettingsRoute
+  '/nested/charmander': typeof NestedCharmanderRoute
+  '/nested/pikachu': typeof NestedPikachuRoute
   '/pokemon/$id': typeof AuthenticatedPokemonIdRoute
   '/pokemon': typeof AuthenticatedPokemonIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/nested': typeof NestedRouteRouteWithChildren
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/auth': typeof AuthRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/_authenticated/search': typeof AuthenticatedSearchRoute
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
+  '/nested/charmander': typeof NestedCharmanderRoute
+  '/nested/pikachu': typeof NestedPikachuRoute
   '/_authenticated/pokemon/$id': typeof AuthenticatedPokemonIdRoute
   '/_authenticated/pokemon/': typeof AuthenticatedPokemonIndexRoute
 }
@@ -92,35 +119,45 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/nested'
     | '/auth'
     | '/profile'
     | '/search'
     | '/settings'
+    | '/nested/charmander'
+    | '/nested/pikachu'
     | '/pokemon/$id'
     | '/pokemon/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/nested'
     | '/auth'
     | '/profile'
     | '/search'
     | '/settings'
+    | '/nested/charmander'
+    | '/nested/pikachu'
     | '/pokemon/$id'
     | '/pokemon'
   id:
     | '__root__'
     | '/'
+    | '/nested'
     | '/_authenticated'
     | '/auth'
     | '/_authenticated/profile'
     | '/_authenticated/search'
     | '/_authenticated/settings'
+    | '/nested/charmander'
+    | '/nested/pikachu'
     | '/_authenticated/pokemon/$id'
     | '/_authenticated/pokemon/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  NestedRouteRoute: typeof NestedRouteRouteWithChildren
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   AuthRoute: typeof AuthRoute
 }
@@ -141,12 +178,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/nested': {
+      id: '/nested'
+      path: '/nested'
+      fullPath: '/nested'
+      preLoaderRoute: typeof NestedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/nested/pikachu': {
+      id: '/nested/pikachu'
+      path: '/pikachu'
+      fullPath: '/nested/pikachu'
+      preLoaderRoute: typeof NestedPikachuRouteImport
+      parentRoute: typeof NestedRouteRoute
+    }
+    '/nested/charmander': {
+      id: '/nested/charmander'
+      path: '/charmander'
+      fullPath: '/nested/charmander'
+      preLoaderRoute: typeof NestedCharmanderRouteImport
+      parentRoute: typeof NestedRouteRoute
     }
     '/_authenticated/settings': {
       id: '/_authenticated/settings'
@@ -186,6 +244,20 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface NestedRouteRouteChildren {
+  NestedCharmanderRoute: typeof NestedCharmanderRoute
+  NestedPikachuRoute: typeof NestedPikachuRoute
+}
+
+const NestedRouteRouteChildren: NestedRouteRouteChildren = {
+  NestedCharmanderRoute: NestedCharmanderRoute,
+  NestedPikachuRoute: NestedPikachuRoute,
+}
+
+const NestedRouteRouteWithChildren = NestedRouteRoute._addFileChildren(
+  NestedRouteRouteChildren,
+)
+
 interface AuthenticatedRouteChildren {
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
   AuthenticatedSearchRoute: typeof AuthenticatedSearchRoute
@@ -208,6 +280,7 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  NestedRouteRoute: NestedRouteRouteWithChildren,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   AuthRoute: AuthRoute,
 }
